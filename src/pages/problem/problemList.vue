@@ -5,6 +5,8 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
   data () {
     return {
@@ -107,4 +109,16 @@ export default {
     }
   }
 }
+axios.get('/apis/getProblemList.do', {
+  params: {
+    name: 'name',
+    id: 1
+  }
+})
+  .then(function (response) {
+    console.log(response)
+  })
+  .catch(function (error) {
+    console.log(error)
+  })
 </script>

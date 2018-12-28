@@ -22,6 +22,16 @@
     width: 600px;
     margin: 0 auto;
   }
+  .layout-sign{
+    position: relative;
+    color: white;
+    font-size: 17px;
+    float: right;
+    margin-right: 50px;
+  }
+  span:hover{
+    cursor: pointer;
+  }
   .layout-footer-center{
     text-align: center;
   }
@@ -60,6 +70,17 @@
               讨论区
             </MenuItem>
           </div>
+          <div class="layout-sign">
+            <div v-if="!loginSuccess">
+              <span class="" v-on:click="loginIn">Sign&nbsp;in</span>
+              <label style="color: #cbced4">or</label>
+              <span>Sign&nbsp;up</span>
+            </div>
+            <div v-else>
+              <span style="font-size: smaller;color: oldlace">登录成功</span>
+              <span @click="login_out">&nbsp;Sing up</span>
+            </div>
+          </div>
         </Menu>
       </Header>
       <!--<Content :style="{margin: '88px 20px 0', background: '#fff', minHeight: '500px'}">-->
@@ -67,14 +88,52 @@
       <!--</Content>-->
       <!--<Footer class="layout-footer-center">2011-2016 &copy; TalkingData</Footer>-->
     </Layout>
+    <!--登录modal-->
+    <Modal
+      v-model="modal1"
+      title="Welcome to Login in">
+      <LoginIn @login_status="get_status"/>
+    </Modal>
   </div>
+
 </template>
 <script>
+import LoginIn from '@/components/login/LoginIn'
+import axios from 'axios'
+
 export default {
   name: 'Navbar',
+  components: { LoginIn
+  },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      modal1: false,
+      loginSuccess: window.localStorage.getItem('login_status')
+    }
+  },
+  methods: {
+    loginIn: function () {
+      this.modal1 = true
+    },
+    get_status: function (res) {
+      this.loginSuccess = res
+      this.modal1 = false
+      debugger
+      if (res === true) {
+        alert('登录成功')
+        window.localStorage.setItem('login_status', 'login_in')
+      }
+    },
+    login_out: function (username) {
+      username = 'test' // todo
+      let that = this
+      axios.get('/apis/loginOut.do', username).then(function (res) {
+        if (res.data === true) {
+          that.loginSuccess = false
+          window.localStorage.clear()
+        }
+      })
     }
   }
 }

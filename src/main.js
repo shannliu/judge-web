@@ -5,9 +5,15 @@ import iView from 'iview'
 import App from './App'
 import router from './router'
 import 'iview/dist/styles/iview.css'
-
+import axios from 'axios'
+// import QS from 'qs'
 Vue.config.productionTip = false
 Vue.use(iView)
+
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
+Vue.prototype.axios = axios
+// Vue.prototype.QS = QS
+axios.defaults.withCredentials = true // 允许axios请求携带cookie等凭证
 
 /* eslint-disable no-new */
 new Vue({

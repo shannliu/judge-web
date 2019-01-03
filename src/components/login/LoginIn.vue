@@ -57,6 +57,7 @@ export default {
             success: response => {
               // 登录成功
               this.status = response === 'success'
+              window.localStorage.setItem('username', model.user)
             },
             error: function () {
               alert('登录失败！')

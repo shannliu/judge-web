@@ -69,10 +69,12 @@
               <Icon type="ios-keypad"></Icon>
               练习
             </MenuItem>
-            <MenuItem name="3">
-              <Icon type="ios-analytics"></Icon>
-              竞赛
-            </MenuItem>
+            <router-link to="/contests">
+              <MenuItem name="3">
+                <Icon type="ios-analytics"></Icon>
+                竞赛
+              </MenuItem>
+            </router-link>
             <MenuItem name="4">
               <Icon type="ios-paper"></Icon>
               试炼场
@@ -90,10 +92,10 @@
             <div v-if="!loginSuccess">
               <span class="" v-on:click="loginIn">Sign&nbsp;in</span>
               <label style="color: #cbced4">or</label>
-              <span>Sign&nbsp;up</span>
+              <span v-on:click="signUp">Sign&nbsp;up</span>
             </div>
             <div v-else>
-              <span style="font-size: smaller;color: oldlace">登录成功</span>
+              <span style="font-size: smaller;color: oldlace">{{username}} 登录成功</span>
               <span @click="login_out">|&nbsp;login out</span>
             </div>
           </div>
@@ -115,7 +117,7 @@
       </footer>
     </Modal>
     <Modal v-model="modal2" :footer-hide="true"
-          title="title" style="text-align: center">
+          title="Welcome to Online Judge" style="text-align: center">
       <SignUp />
     </Modal>
   </div>
@@ -135,6 +137,7 @@ export default {
       msg: 'Welcome to Your Vue.js App',
       modal1: false,
       modal2: false,
+      username: window.localStorage.getItem('username'),
       loginSuccess: window.localStorage.getItem('login_status')
     }
   },
@@ -142,13 +145,16 @@ export default {
     loginIn: function () {
       this.modal1 = true
     },
+    signUp: function () {
+      this.modal2 = true
+    },
     get_status: function (res) {
       this.loginSuccess = res
       this.modal1 = false
-      debugger
       if (res === true) {
         alert('登录成功')
         window.localStorage.setItem('login_status', 'login_in')
+        this.username = window.localStorage.getItem('username')
       } else {
         alert('登录失败，请检查用户名和密码！')
       }

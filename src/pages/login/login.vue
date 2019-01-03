@@ -12,22 +12,22 @@
 </template>
 
 <script>
-  export default {
-    name: 'login.vue',
-    data () {
-      return {
-        modal1: false
-      }
+export default {
+  name: 'login.vue',
+  data () {
+    return {
+      modal1: false
+    }
+  },
+  methods: {
+    ok () {
+      this.$Message.info('Clicked ok')
     },
-    methods: {
-      ok () {
-        this.$Message.info('Clicked ok')
-      },
-      cancel () {
-        this.$Message.info('Clicked cancel')
-      }
+    cancel () {
+      this.$Message.info('Clicked cancel')
     }
   }
+}
 </script>
 
 <style scoped>

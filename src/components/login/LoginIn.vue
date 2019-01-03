@@ -18,6 +18,7 @@
 <script>
 // import axios from 'axios'
 import $ from 'jquery'
+
 export default {
   name: 'LoginIn',
   data () {
@@ -43,15 +44,7 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           let model = this.formInline
-          // axios.post('http://localhost:9000/login.do', model).then(response => {
-          //   let result = response.data
-          //   // 登录成功
-          //   if (result === 'success') {
-          //     this.status = true
-          //   } else {
-          //     this.status = false
-          //   }
-          // })
+          // 需要同步
           $.ajax({
             url: '/apis/login.do',
             method: 'POST',
@@ -62,14 +55,8 @@ export default {
             data: JSON.stringify(model),
             async: false,
             success: response => {
-              debugger
-              let result = response
               // 登录成功
-              if (result === 'success') {
-                this.status = true
-              } else {
-                this.status = false
-              }
+              this.status = response === 'success'
             },
             error: function () {
               alert('登录失败！')
@@ -88,7 +75,7 @@ export default {
 <style>
   .submitButton{
     width: 90%;
-    margin-left: 5%;
+    /*margin-left: 5%;*/
     background-color: #57a3f3;
     border-color: #2d8cf0;
     color: #ffffff;

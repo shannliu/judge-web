@@ -35,6 +35,22 @@
   .layout-footer-center{
     text-align: center;
   }
+  .findPassword{
+    color: dodgerblue;
+    float: left;
+    margin-left: 20px;
+  }
+  .signUp{
+    color: dodgerblue;
+    float: right;
+    margin-right: 20px;
+  }
+  .findPassword:hover{
+    cursor: pointer;
+  }
+  .signUp:hover{
+    cursor: pointer;
+  }
 </style>
 <template>
   <div class="layout">
@@ -78,7 +94,7 @@
             </div>
             <div v-else>
               <span style="font-size: smaller;color: oldlace">登录成功</span>
-              <span @click="login_out">&nbsp;Sing up</span>
+              <span @click="login_out">|&nbsp;login out</span>
             </div>
           </div>
         </Menu>
@@ -90,25 +106,35 @@
     </Layout>
     <!--登录modal-->
     <Modal
-      v-model="modal1"
-      title="Welcome to Login in">
+      v-model="modal1" :footer-hide="true"
+      title="Welcome to Online Judge" style="text-align: center">
       <LoginIn @login_status="get_status"/>
+      <footer style="margin-bottom: 40px">
+        <span class="findPassword">Forgot password?</span>
+        <span class="signUp" @click="changeToSingUp">Sign up</span>
+      </footer>
+    </Modal>
+    <Modal v-model="modal2" :footer-hide="true"
+          title="title" style="text-align: center">
+      <SignUp />
     </Modal>
   </div>
 
 </template>
 <script>
 import LoginIn from '@/components/login/LoginIn'
+import SignUp from '@/components/login/SignUp'
 import axios from 'axios'
 
 export default {
   name: 'Navbar',
-  components: { LoginIn
+  components: { LoginIn, SignUp
   },
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
       modal1: false,
+      modal2: false,
       loginSuccess: window.localStorage.getItem('login_status')
     }
   },
@@ -123,6 +149,8 @@ export default {
       if (res === true) {
         alert('登录成功')
         window.localStorage.setItem('login_status', 'login_in')
+      } else {
+        alert('登录失败，请检查用户名和密码！')
       }
     },
     login_out: function (username) {
@@ -134,6 +162,10 @@ export default {
           window.localStorage.clear()
         }
       })
+    },
+    changeToSingUp: function () {
+      this.modal1 = false
+      this.modal2 = true
     }
   }
 }

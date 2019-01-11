@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   data () {
@@ -109,16 +109,16 @@ export default {
     }
   }
 }
-axios.get('/apis/getProblemList.do', {
-  params: {
-    name: 'name',
-    id: 1
-  }
-})
-  .then(function (response) {
-    console.log(response)
-  })
-  .catch(function (error) {
-    console.log(error)
-  })
+// axios.get('/apis/getProblemList.do', {
+//   params: {
+//     name: 'name',
+//     id: 1
+//   }
+// })
+//   .then(function (response) {
+//     console.log(response)
+//   })
+//   .catch(function (error) {
+//     console.log(error)
+//   })
 </script>

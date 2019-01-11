@@ -6,9 +6,13 @@ import App from './App'
 import router from './router'
 import 'iview/dist/styles/iview.css'
 import axios from 'axios'
+import VueCodemirror from 'vue-codemirror'
+// require styles
+import 'codemirror/lib/codemirror.css'
 // import QS from 'qs'
 Vue.config.productionTip = false
 Vue.use(iView)
+Vue.use(VueCodemirror)
 
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 Vue.prototype.axios = axios

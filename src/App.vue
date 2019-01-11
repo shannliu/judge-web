@@ -6,7 +6,7 @@
         <router-view/>
       </transition>
     </div>
-    <Footer class="layout-footer-center">2002-2019 &copy; Nju Software</Footer>
+    <!--<Footer class="layout-footer-center">2002-2019 &copy; Nju Software</Footer>-->
   </div>
 </template>
 
@@ -23,9 +23,11 @@ export default {
 </script>
 
 <style>
+  #app{
+    background-color: #eee;
+  }
   .content-app{
     margin: 88px 20px 0;
-    background: #fff;
     minHeight: 500px;
   }
   .layout-footer-center{
@@ -34,5 +36,6 @@ export default {
     position: fixed;
     bottom:0px;
     width:100%;
+    z-index:9999;
   }
 </style>

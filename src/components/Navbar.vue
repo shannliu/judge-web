@@ -51,6 +51,9 @@
   .signUp:hover{
     cursor: pointer;
   }
+  .layout{
+    z-index: 1000;
+  }
 </style>
 <template>
   <div class="layout">

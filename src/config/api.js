@@ -63,6 +63,7 @@ function ajax (url, method, options) {
       if (res.data.code !== 0) {
         // 若后端返回为登录，则为session失效，应退出当前登录用户
         if (res.data.code === 1) {
+          // 预留部分逻辑，待完成
           Vue.prototype.$error(res.data.msg)
         } else {
           Vue.prototype.$error(res.data.msg)

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import contests from '../pages/contents/contests'
 import problem from '../pages/problem/problem'
+import contestDetail from '../pages/contents/contestsDetail'
 import iView from 'iview'
 Vue.use(Router)
 Vue.use(iView)
@@ -22,6 +23,11 @@ export default new Router({
       name: 'problemDetail',
       path: '/problem/:problemID',
       component: problem
+    },
+    {
+      name: 'contestsDetail',
+      path: '/contests/:contestID',
+      component: contestDetail
     }
   ]
 })

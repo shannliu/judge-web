@@ -44,6 +44,7 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           let model = this.formInline
+          debugger
           // 需要同步
           $.ajax({
             url: '/apis/login.do',
@@ -56,6 +57,7 @@ export default {
             async: false,
             success: response => {
               // 登录成功
+              debugger
               this.status = response.code === 0
               window.localStorage.setItem('username', model.userName)
             },

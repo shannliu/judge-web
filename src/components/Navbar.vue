@@ -163,7 +163,7 @@ export default {
       }
     },
     login_out: function (username) {
-      username = 'test' // todo
+      username = window.localStorage.getItem('username')
       let that = this
       axios.get('/loginOut.do', username).then(function (res) {
         if (res.data.code === 0) {

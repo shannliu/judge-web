@@ -39,8 +39,8 @@ export default {
     }
   },
   created: function () { // 初始化
-    var self = this
-    axios.get('/apis/getAllContests.do', {})
+    let self = this
+    axios.get('/getAllContests.do', {})
       .then(function (response) {
         self.contestsList = response.data
       })

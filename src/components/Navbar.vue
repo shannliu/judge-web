@@ -155,20 +155,21 @@ export default {
       this.loginSuccess = res
       this.modal1 = false
       if (res === true) {
-        alert('登录成功')
+        this.$success('登录成功')
         window.localStorage.setItem('login_status', 'login_in')
         this.username = window.localStorage.getItem('username')
       } else {
-        alert('登录失败，请检查用户名和密码！')
+        this.$error('登录失败，请检查用户名和密码！')
       }
     },
     login_out: function (username) {
       username = 'test' // todo
       let that = this
-      axios.get('/apis/loginOut.do', username).then(function (res) {
-        if (res.data === true) {
+      axios.get('/loginOut.do', username).then(function (res) {
+        if (res.data.code === 0) {
           that.loginSuccess = false
           window.localStorage.clear()
+          that.$success('退出成功')
         }
       })
     },

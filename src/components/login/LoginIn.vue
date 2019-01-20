@@ -1,7 +1,7 @@
 <template>
   <Form ref="formInline" :model="formInline" :rules="ruleInline">
-    <FormItem prop="user">
-      <Input type="text" v-model="formInline.user" placeholder="Username">
+    <FormItem prop="userName">
+      <Input type="text" v-model="formInline.userName" placeholder="Username">
         <Icon type="ios-person-outline" slot="prepend"></Icon>
       </Input>
     </FormItem>
@@ -25,11 +25,11 @@ export default {
     return {
       status: false,
       formInline: {
-        user: '',
+        userName: '',
         password: ''
       },
       ruleInline: {
-        user: [
+        userName: [
           { required: true, message: 'Please fill in the user name', trigger: 'blur' }
         ],
         password: [
@@ -56,11 +56,10 @@ export default {
             async: false,
             success: response => {
               // 登录成功
-              this.status = response === 'success'
-              window.localStorage.setItem('username', model.user)
+              this.status = response.code === 0
+              window.localStorage.setItem('username', model.userName)
             },
             error: function () {
-              alert('登录失败！')
             }
           })
         } else {

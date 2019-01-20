@@ -32,7 +32,7 @@
 import axios from 'axios'
 
 function UserModal () {
-  this.user = ''
+  this.userName = ''
   this.password = ''
   this.email = ''
 }
@@ -80,10 +80,10 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           let model = new UserModal()
-          model.user = this.formCustom.username
+          model.userName = this.formCustom.username
           model.password = this.formCustom.passwd
           model.email = this.formCustom.email
-          axios.post('/apis/register.do', model).then(function (res) {
+          axios.post('/register.do', model).then(function (res) {
             alert(res)
           })
         } else {

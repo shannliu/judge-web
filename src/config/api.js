@@ -61,10 +61,12 @@ function ajax (url, method, options) {
     }).then(res => {
       // API正常返回(status=20x), 是否错误通过有无error判断
       if (res.data.code !== 0) {
-        Vue.prototype.$error(res.data.data)
-        reject(res)
         // 若后端返回为登录，则为session失效，应退出当前登录用户
-        if (res.data.data.startsWith('Please login')) {
+        if (res.data.code === 1) {
+          Vue.prototype.$error(res.data.msg)
+        } else {
+          Vue.prototype.$error(res.data.msg)
+          reject(res)
         }
       } else {
         resolve(res)
@@ -75,7 +77,7 @@ function ajax (url, method, options) {
     }, res => {
       // API请求异常，一般为Server error 或 network error
       reject(res)
-      Vue.prototype.$error(res.data.data)
+      Vue.prototype.$error(res.data.error)
     })
   })
 }

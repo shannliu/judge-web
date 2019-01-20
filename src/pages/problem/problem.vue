@@ -91,7 +91,7 @@
              </TabPane>
              <TabPane label="提交记录" name="submission" icon="md-time" >
                <Table :loading="loading" :columns="columns1" :data="submissionList"></Table>
-               <Page :total="100" show-elevator />
+               <Page :total="page.total" show-elevator :current="page.pageNum" :page-size="page.pageSize" style="margin-top:10px;" @on-change="changePageNum"/>
              </TabPane>
              <TabPane label="讨论" name="discuss" icon="ios-chatbubbles-outline">讨论</TabPane>
            </Tabs>
@@ -205,6 +205,11 @@ export default {
   data () {
     return {
       problem: {},
+      page: {
+        pageNum: 1,
+        pageSize: 10,
+        total: 0
+      },
       codeSettingModal: false,
       submissionModal: false,
       displayTab: 'description',
@@ -216,7 +221,7 @@ export default {
       size: 13,
       tab: 4,
       key: 'default',
-      theme: 'textmate',
+      theme: 'material',
       sizeList: [
         {
           value: 12,
@@ -414,7 +419,8 @@ export default {
           title: '耗费内存',
           key: 'memory',
           render: (h, params) => {
-            return h('span', {}, params.row.memory + 'KB')
+            let m = parseInt(params.row.memory / 1000)
+            return h('span', {}, m + 'MB')
           }
         },
         {
@@ -488,21 +494,32 @@ export default {
         let data = res.data.data
         if (data !== null) {
           this.code = data.source
+          this.lang = data.language
+          this.changeLang(this.lang)
         }
       }, () => {
         this.$Loading.error()
       })
     },
+    changePageNum (pageNum) {
+      this.page.pageNum = pageNum
+      this.getSubmission()
+    },
+    getSubmission () {
+      this.problemID = this.$route.params.problemID
+      api['submissionMy']({problemId: this.problemID, pageNum: this.page.pageNum, pageSize: this.page.pageSize}).then(res => {
+        this.$Loading.finish()
+        this.submissionList = res.data.data.list
+        this.page.pageSize = res.data.data.pageSize
+        this.page.total = res.data.data.total
+        this.page.pageNum = res.data.data.pageNum
+      }, () => {
+        this.$Loading.error()
+      })
+    },
     handleSubmission (name) {
-      console.log(name)
       if (name === 'submission') {
-        this.problemID = this.$route.params.problemID
-        api['submissionMy']({problemId: this.problemID}).then(res => {
-          this.$Loading.finish()
-          this.submissionList = res.data.data
-        }, () => {
-          this.$Loading.error()
-        })
+        this.getSubmission()
       }
     },
     codeSetting () {
@@ -516,8 +533,11 @@ export default {
       }
       const checkStatus = () => {
         this.problemID = this.$route.params.problemID
-        api['submissionMy']({problemId: this.problemID}).then(res => {
-          this.submissionList = res.data.data
+        api['submissionMy']({problemId: this.problemID, pageNum: 1, pageSize: this.page.pageSize}).then(res => {
+          this.submissionList = res.data.data.list
+          this.page.pageSize = res.data.data.pageSize
+          this.page.total = res.data.data.total
+          this.page.pageNum = res.data.data.pageNum
           let sub = this.submissionList[0]
           if (sub.result >= 4 && sub.result <= 11) {
             this.submitting = false
@@ -569,6 +589,7 @@ export default {
     changeLang (lang) {
       console.log('change :  ' + lang)
       this.mode = this.getMode(lang)
+      console.log(this.mode)
       this.cmOptions = {
         // codemirror options
         tabSize: 4,

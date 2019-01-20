@@ -98,12 +98,12 @@
          </div>
          <div slot="right" class="demo-split-pane">
            <Row style="padding-bottom:2px;border-bottom: #DCDEE1 1px solid;">
-             <Col span="8">
-               <Select v-model="lang" style="width:200px" @on-change="changeLang">
+             <Col :xs="24" :sm="24" :md="24" :lg="12">
+               <Select v-model="lang" @on-change="changeLang">
                  <Option v-for="item in langs" :value="item.value" :key="item.value">{{ item.label }}</Option>
                </Select>
              </Col>
-             <Col span="16">
+             <Col :xs="24" :sm="24" :md="24" :lg="12">
                <div  style="float: right;">
                  <Tooltip content="获取最后一次提交的代码" placement="right">
                    <Icon type="md-cloud-download" size="20" @click="getLastCode"/>
@@ -117,8 +117,8 @@
                </div>
              </Col>
            </Row>
-           <Row style="margin-top:10px;">
-             <codemirror v-model="code" :options="cmOptions"></codemirror>
+           <Row style="margin-top:10px;" :xs="24" :sm="24" :md="24" :lg="24">
+             <codemirror v-model="code" :options="cmOptions" v-bind:style="{ fontSize: size + 'px' }"></codemirror>
            </Row>
            <Row>
              <Button type="success" long style="margin-top: 1px;" @click="submitCode">提交</Button>
@@ -131,19 +131,20 @@
       v-model="submissionModal"
       title="提交记录">
       <Row>
-        <codemirror v-model="submissionDetail.submissionModel.source" :options="cmOptions2" v-bind:style="{ fontSize: size + 'px' }"></codemirror>
+        <codemirror v-model="submissionDetail.submissionModel.source" :options="cmOptions2"></codemirror>
       </Row>
     </Modal>
     <Modal
       v-model="codeSettingModal"
-      title="代码编辑器设置">
+      title="代码编辑器设置"
+      footer-hide>
       <Row :gutter="16" style="">
         <Col span="12">
           <p style="color: #212121;">字体设置</p>
           <p style="color: #9e9e9e">调整适合你的字体大小。</p>
         </Col>
         <Col span="12">
-          <Select v-model="size">
+          <Select v-model="size" @on-change="setting">
             <Option v-for="item in sizeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </Col>
@@ -154,7 +155,7 @@
           <p style="color: #9e9e9e">切换不同的代码编辑器主题，选择适合你的语法高亮。</p>
         </Col>
         <Col span="12">
-          <Select v-model="theme">
+          <Select v-model="theme"  @on-change="setting">
             <Option v-for="item in themeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </Col>
@@ -165,7 +166,7 @@
           <p style="color: #9e9e9e">想要练习使用 Vim 或者 Emacs？你可以在这里切换这些预设的键位绑定。</p>
         </Col>
         <Col span="12">
-          <Select v-model="key">
+          <Select v-model="key"  @on-change="setting">
             <Option v-for="item in keyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </Col>
@@ -176,7 +177,7 @@
           <p style="color: #9e9e9e">选择你想要的 Tab 长度，默认设置为4个空格。</p>
         </Col>
         <Col span="12">
-          <Select v-model="tab">
+          <Select v-model="tab"  @on-change="setting">
             <Option v-for="item in tabList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </Col>
@@ -191,6 +192,10 @@ import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/javascript/javascript.js'
 import 'codemirror/mode/clike/clike.js'
 import 'codemirror/mode/python/python.js'
+// keymap js
+import 'codemirror/keymap/emacs.js'
+import 'codemirror/keymap/vim.js'
+import 'codemirror/keymap/sublime.js'
 // theme css
 import 'codemirror/theme/base16-dark.css'
 import 'codemirror/theme/material.css'
@@ -371,26 +376,26 @@ export default {
                 break
               case 7 :
                 color = 'error'
-                colorShow = '答案错误'
+                colorShow = '时间超限'
                 break
               case 8 :
                 color = 'error'
-                colorShow = '答案错误'
+                colorShow = '内存超限'
                 break
               case 9 :
                 color = 'error'
-                colorShow = '答案错误'
+                colorShow = '输出超限'
                 break
               case 10 :
                 color = 'error'
-                colorShow = '答案错误'
+                colorShow = '运行错误'
                 break
               case 11 :
                 color = 'error'
-                colorShow = '答案错误'
+                colorShow = '编译错误'
                 break
               case 12 :
-                color = 'warning'
+                color = 'success'
                 colorShow = '编译成功'
                 break
             }
@@ -469,7 +474,8 @@ export default {
         theme: 'material',
         keyMap: 'default',
         lineNumbers: true,
-        line: true
+        line: true,
+        lineWrapping: true
         // more codemirror options, 更多 codemirror 的高级配置...
       }
     }
@@ -487,6 +493,20 @@ export default {
       }, () => {
         this.$Loading.error()
       })
+    },
+    setting () {
+      console.log('change...')
+      this.cmOptions = {
+        // codemirror options
+        tabSize: this.tab,
+        mode: this.mode,
+        keyMap: this.key,
+        theme: this.theme,
+        lineNumbers: true,
+        line: true,
+        lineWrapping: true
+        // more codemirror options, 更多 codemirror 的高级配置...
+      }
     },
     getLastCode () {
       this.problemID = this.$route.params.problemID
@@ -506,6 +526,7 @@ export default {
       this.getSubmission()
     },
     getSubmission () {
+      this.$Loading.start()
       this.problemID = this.$route.params.problemID
       api['submissionMy']({problemId: this.problemID, pageNum: this.page.pageNum, pageSize: this.page.pageSize}).then(res => {
         this.$Loading.finish()
@@ -592,12 +613,13 @@ export default {
       console.log(this.mode)
       this.cmOptions = {
         // codemirror options
-        tabSize: 4,
+        tabSize: this.tab,
         mode: this.mode,
         keyMap: this.key,
         theme: this.theme,
         lineNumbers: true,
-        line: true
+        line: true,
+        lineWrapping: true
         // more codemirror options, 更多 codemirror 的高级配置...
       }
     },

@@ -1,7 +1,7 @@
 <template>
   <div style="background:#eee;padding: 20px">
     <Card :bordered="false">
-      <h1>竞赛标题</h1>
+      <h1>{{contestInfo.title}}</h1>
       <div class="callout">
         <div style="padding: 5px 0 5px 0">
           <label style="background-color: red;width: 5px;"> &nbsp;</label>
@@ -10,7 +10,7 @@
       <br>
       <div style="margin-bottom: 15px">
         <h2 style="margin-bottom: 10px">竞赛描述</h2>
-        <p style="margin-left: 5px" >本竞赛用于xxxxxxxxxxxx</p>
+        <p style="margin-left: 5px">{{contestInfo.description}}</p>
       </div>
       <Card>
         <p slot="title">竞赛信息</p>
@@ -41,77 +41,62 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
   data () {
     return {
+      contestInfo: '',
       columns1: [
         {
-          title: 'StartTime',
+          title: '开始时间',
           key: 'start_time'
         },
         {
-          title: 'EndTime',
+          title: '结束时间',
           key: 'end_time'
         },
         {
-          title: 'ContestType',
+          title: '竞赛模式',
           key: 'contest_type'
         },
         {
-          title: 'Rule',
+          title: '竞赛规则',
           key: 'rule'
         },
         {
-          title: 'Author',
+          title: '发起人',
           key: 'author'
         }
       ],
       data1: [
         {
-          start_time: '2019-01-20',
-          end_time: '2019-01-20',
-          contest_type: 'public',
-          rule: 'ACM',
-          author: 'zk'
+          start_time: '',
+          end_time: '',
+          contest_type: '',
+          rule: '',
+          author: ''
         }
       ],
       columns2: [
         {
           title: '#',
-          key: 'p_id'
+          key: 'problemId'
         },
         {
           title: 'Title',
-          key: 'p_title'
+          key: 'title'
         },
         {
           title: 'total',
-          key: 'p_total'
+          key: 'submit'
         },
         {
           title: 'AC Rate',
-          key: 'p_rate'
+          key: 'accepted'
         }
       ],
       data2: [
-        {
-          p_id: 1,
-          p_title: '2019-01-20',
-          p_total: 'public',
-          p_rate: 'ACM'
-        },
-        {
-          p_id: 1,
-          p_title: '2019-01-20',
-          p_total: 'public',
-          p_rate: 'ACM'
-        },
-        {
-          p_id: 1,
-          p_title: '2019-01-20',
-          p_total: 'public',
-          p_rate: 'ACM'
-        }
       ],
       columns3: [
         {
@@ -146,18 +131,48 @@ export default {
         }
       ]
     }
+  },
+  created: function () { // 初始化
+    let self = this
+    let url = window.location.search
+    let url1 = '/contests/getContest.do?' + url.substring(1)
+    axios.get(url1, {})
+      .then(function (response) {
+        if (response.data.code !== 0) {
+          this.$error('error')
+          console.log('error') // todo  后续改为模态框提示
+        } else {
+          self.contestInfo = response.data.data
+          self.data1[0].start_time = self.contestInfo.beginTime
+          self.data1[0].end_time = self.contestInfo.endTime
+          self.data1[0].contest_type = self.contestInfo.accessPermission
+          self.data1[0].rule = self.contestInfo.contestType
+          self.data1[0].author = self.contestInfo.userName
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+    let url2 = 'contests/getProblems?' + url.substring(1)
+    axios.get(url2).then(function (response) {
+      if (response.data.code !== 0) {
+        this.$error('error')
+        console.log('error') // todo  后续改为模态框提示
+      } else {
+        self.data2 = response.data.data
+      }
+    }).catch(function (error) {
+      console.log(error)
+    })
   }
 }
 </script>
 <style>
   .callout {
     margin: 5px 0 0 5px;
-    height:40px;
+    height: 40px;
     background: white;
     font-size: 18px;
     font-weight: 300;
-  }
-  .callout-success {
-    border-left-color: #5cb85c;
   }
 </style>

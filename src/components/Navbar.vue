@@ -68,10 +68,12 @@
               <Icon type="ios-navigate"></Icon>
               首页
             </MenuItem>
+            <router-link to="/problems">
             <MenuItem name="2">
               <Icon type="ios-keypad"></Icon>
               练习
             </MenuItem>
+            </router-link>
             <router-link to="/contests">
               <MenuItem name="3">
                 <Icon type="ios-analytics"></Icon>

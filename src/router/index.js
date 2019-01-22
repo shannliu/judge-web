@@ -4,6 +4,8 @@ import contests from '../pages/contents/contests'
 import problem from '../pages/problem/problem'
 import contestDetail from '../pages/contents/contestsDetail'
 import iView from 'iview'
+import problemList from "../pages/problem/problemList";
+import ranking from "../pages/user/ranking";
 Vue.use(Router)
 Vue.use(iView)
 
@@ -13,7 +15,7 @@ export default new Router({
     {
       path: '/problems',
       name: 'problem',
-      component: problem
+      component: problemList
     },
     {
       path: '/contests',
@@ -29,6 +31,11 @@ export default new Router({
       name: 'contestsDetail',
       path: '/contests/:contestID',
       component: contestDetail
+    },
+    {
+      name: 'ranking',
+      path: '/ranking',
+      component: ranking
     }
   ]
 })

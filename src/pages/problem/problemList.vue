@@ -21,24 +21,26 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
-
+import api from '@/config/api'
 export default {
   data () {
     return {
-      problemsList: '',
-      loading: false
+      problemsList: []
     }
   },
-  created: function () { // 初始化
-    var self = this
-    axios.get('/apis/problem/getListProblem.do', {})
-      .then(function (response) {
-        self.problemsList = response.data
+  mounted () {
+    this.init()
+  },
+  methods: {
+    init () {
+      this.$Loading.start()
+      api['problemsList']().then(res => {
+        this.$Loading.finish()
+        this.problemsList = res.data.data.list
+      }, () => {
+        this.$Loading.error()
       })
-      .catch(function (error) {
-        console.log(error)
-      })
+    }
   }
 }
 </script>

@@ -13,6 +13,18 @@ export default {
       }
     })
   },
+  problemsList () {
+    return ajax('problem/getProblemList', 'get', {
+      params: {
+      }
+    })
+  },
+  orderUsers () {
+    return ajax('getOrderUser.do', 'get', {
+      params: {
+      }
+    })
+  },
   submissionMy (data) {
     return ajax('submission/my', 'post', {
       data

@@ -92,6 +92,16 @@
               <Icon type="ios-paper"></Icon>
               讨论区
             </MenuItem>
+            <MenuItem name="7">
+              <Icon type="ios-paper"></Icon>
+              提交记录
+            </MenuItem>
+            <router-link to="/ranking">
+              <MenuItem name="2">
+                <Icon type="ios-keypad"></Icon>
+                排名
+              </MenuItem>
+            </router-link>
           </div>
           <div class="layout-sign">
             <div v-if="!loginSuccess">

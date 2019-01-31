@@ -30,6 +30,11 @@ export default {
       data
     })
   },
+  submissionsList (data) {
+    return ajax('submission/getListSubmission', 'get', {
+      data
+    })
+  },
   submitCode (data) {
     return ajax('submission/submit', 'post', {
       data

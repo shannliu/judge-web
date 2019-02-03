@@ -36,7 +36,7 @@ export default {
       this.$Loading.start()
       api['problemsList']().then(res => {
         this.$Loading.finish()
-        this.problemsList = res.data.data.list
+        this.problemsList = res.data.data
       }, () => {
         this.$Loading.error()
       })

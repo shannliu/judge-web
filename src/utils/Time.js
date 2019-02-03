@@ -29,10 +29,10 @@ export default {
   },
   getFormatTime (time) {
     let timestamp = new Date(time).getTime()
-    var now = this.getUnix()
-    var today = this.getTodayUnix()
-    var timer = (now - timestamp) / 1000
-    var tip = ''
+    let now = this.getUnix()
+    let today = this.getTodayUnix()
+    let timer = (now - timestamp) / 1000
+    let tip = ''
 
     if (timer <= 10) {
       tip = '刚刚'

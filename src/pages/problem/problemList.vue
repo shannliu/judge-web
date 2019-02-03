@@ -2,11 +2,11 @@
   <div style="background:#eee;padding: 20px">
     <Card :bordered="false" title="The Problems">
       <ol id="problem_list">
-        <li v-for="(item , index) in problemsList" v-bind:key="index">
+        <li v-for="(item , index) in page.data" v-bind:key="index">
           <div class="ivu-row-flex ivu-row-flex-middle ivu-row-flex-space-between">
-            <div class="contest-main ivu-col ivu-col-span-18" style="left: -20%">
+            <div class="contest-main ivu-col ivu-col-span-18" >
               <p class="title">
-                <a href="javascript:void(0)">{{item.title}}</a>
+                <a v-bind:href="'/problem/' + item.problemId">{{item.title}}</a>
               </p>
               <ul>
                 <li title="是否通过"><Icon type="ios-calendar-outline" style="color: rgb(48, 145, 242);"/>
@@ -17,7 +17,7 @@
         </li>
       </ol>
     </Card>
-    <Page :total="10" show-total style="margin-top:10px;"/>
+    <Page :total="page.total" page-size=20 style="padding-left: 20px;margin-top:10px;" size="small" @on-change="onChange" show-total show-elevator show-sizer />
   </div>
 </template>
 <script>
@@ -25,7 +25,11 @@ import api from '@/config/api'
 export default {
   data () {
     return {
-      problemsList: []
+      problemsList: [],
+      page: {
+        data: [],
+        total: 0
+      }
     }
   },
   mounted () {
@@ -37,9 +41,21 @@ export default {
       api['problemsList']().then(res => {
         this.$Loading.finish()
         this.problemsList = res.data.data
+        for (let i = 0; i < this.problemsList.length; i++) {
+          if (i < 20) {
+            this.page.data.push(this.problemsList[i])
+          }
+        }
+        this.page.total = this.problemsList.length
       }, () => {
         this.$Loading.error()
       })
+    },
+    onChange: function (curpage) {
+      this.page.data = []
+      for (var i = 10 * (curpage - 1) + 1; i <= ((this.page.total > 10 * curpage) ? (10 * curpage) : (this.page.total)); i++) {
+        this.page.data.push(this.problemsList[i - 1])
+      }
     }
   }
 }

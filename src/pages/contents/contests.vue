@@ -7,7 +7,7 @@
               <img src="/static/image/award.png" class="trophy">
               <div class="contest-main ivu-col ivu-col-span-18" style="left: -20%">
                   <p class="title">
-                    <a href="javascript:void(0)">{{item.title}}</a>
+                    <a :href="'/contests/'+item.contestId">{{item.title}}</a>
                   </p>
                   <ul>
                     <li title="截止时间"><Icon type="ios-calendar-outline" style="color: rgb(48, 145, 242);"/>

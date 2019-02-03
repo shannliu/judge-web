@@ -41,12 +41,13 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+import api from '@/config/api'
 
 export default {
   data () {
     return {
       contestInfo: '',
+      contestID: 1000,
       columns1: [
         {
           title: '开始时间',
@@ -134,35 +135,31 @@ export default {
   },
   created: function () { // 初始化
     let self = this
-    let url = window.location.search
-    let url1 = '/contests/getContest.do?' + url.substring(1)
-    axios.get(url1, {})
-      .then(function (response) {
-        if (response.data.code !== 0) {
-          this.$error('error')
-          console.log('error') // todo  后续改为模态框提示
-        } else {
-          self.contestInfo = response.data.data
-          self.data1[0].start_time = self.contestInfo.beginTime
-          self.data1[0].end_time = self.contestInfo.endTime
-          self.data1[0].contest_type = self.contestInfo.accessPermission
-          self.data1[0].rule = self.contestInfo.contestType
-          self.data1[0].author = self.contestInfo.userName
-        }
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
-    let url2 = 'contests/getProblems?' + url.substring(1)
-    axios.get(url2).then(function (response) {
+    this.contestID = this.$route.params.contestID
+    api['getContest'](this.contestID).then(response => {
+      if (response.data.code !== 0) {
+        this.$error('error')
+        console.log('error') // todo  后续改为模态框提示
+      } else {
+        self.contestInfo = response.data.data
+        self.data1[0].start_time = self.contestInfo.beginTime
+        self.data1[0].end_time = self.contestInfo.endTime
+        self.data1[0].contest_type = self.contestInfo.accessPermission
+        self.data1[0].rule = self.contestInfo.contestType
+        self.data1[0].author = self.contestInfo.userName
+      }
+    }, () => {
+      this.$Loading.error()
+    })
+    api['getCProblems'](this.contestID).then(response => {
       if (response.data.code !== 0) {
         this.$error('error')
         console.log('error') // todo  后续改为模态框提示
       } else {
         self.data2 = response.data.data
       }
-    }).catch(function (error) {
-      console.log(error)
+    }, () => {
+      this.$Loading.error()
     })
   }
 }

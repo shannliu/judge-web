@@ -30,6 +30,11 @@ export default {
       data
     })
   },
+  submissionsList (data) {
+    return ajax('submission/getListSubmission', 'get', {
+      data
+    })
+  },
   submitCode (data) {
     return ajax('submission/submit', 'post', {
       data
@@ -46,6 +51,20 @@ export default {
     return ajax('submission/getLastCode', 'get', {
       params: {
         problemId: problemId
+      }
+    })
+  },
+  getContest (contestId) {
+    return ajax('contests/getContest.do', 'get', {
+      params: {
+        id: contestId
+      }
+    })
+  },
+  getCProblems (contestId) {
+    return ajax('contests/getProblems', 'get', {
+      params: {
+        id: contestId
       }
     })
   }

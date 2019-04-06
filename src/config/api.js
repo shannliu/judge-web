@@ -67,6 +67,12 @@ export default {
         id: contestId
       }
     })
+  },
+  statusList () {
+    return ajax('status/list', 'get', {
+      params: {
+      }
+    })
   }
 }
 

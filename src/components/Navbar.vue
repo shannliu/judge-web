@@ -84,10 +84,12 @@
               <Icon type="ios-paper"></Icon>
               试炼场
             </MenuItem>
+            <router-link to="/status">
             <MenuItem name="5">
               <Icon type="ios-paper"></Icon>
               状态
             </MenuItem>
+            </router-link>
             <MenuItem name="6">
               <Icon type="ios-paper"></Icon>
               讨论区

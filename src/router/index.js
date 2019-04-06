@@ -6,6 +6,7 @@ import contestDetail from '../pages/contents/contestsDetail'
 import iView from 'iview'
 import problemList from '../pages/problem/problemList'
 import ranking from '../pages/user/ranking'
+import status from '../pages/status/status'
 Vue.use(Router)
 Vue.use(iView)
 
@@ -36,6 +37,11 @@ export default new Router({
       name: 'ranking',
       path: '/ranking',
       component: ranking
+    },
+    {
+      name: 'status',
+      path: '/status',
+      component: status
     }
   ]
 })
